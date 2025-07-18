@@ -1,6 +1,6 @@
 
 export type BudgetActions =
-    { type: 'ADD_BUDGET', payload: { badget: number } };
+    { type: 'ADD_BUDGET', payload: { budget: number } };
 
 export type BudgetState = {
     budget: number;
@@ -17,7 +17,7 @@ export const budgetReducer = (
     if(action.type === "ADD_BUDGET"){
         return {
             ...state, 
-            budget: action.payload.badget
+            budget: action.payload.budget
         }
     }
     return state;

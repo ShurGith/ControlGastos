@@ -2,7 +2,7 @@ import { useMemo, useState } from "react"
 import { useBudget } from "../hooks/useBudget"
 export default function BudgetFrom() {
     const [budget, setBudget] = useState(0)
-    const { state, dispatch } = useBudget();
+    const { dispatch } = useBudget();
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,6 @@ const handleSubmit = (e:React.FormEvent<HTMLFormElement>) => {
                 value={budget} 
                 onChange={handleInputChange}
                 min="0"
-                step="0.5"
                 />
 
                 <input 

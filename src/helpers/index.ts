@@ -4,3 +4,15 @@ export function formatCurrency(amount: number, currency = 'USD') {
       amount)
   )
 }
+
+export const formatDate = (dateStr: string) => {
+  if (!dateStr || dateStr === '') return ''
+  const dateObj = new Date(dateStr)
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'long',
+    weekday: 'long',
+    day: 'numeric',
+  } 
+  return dateObj.toLocaleDateString('es-ES',options)
+} 

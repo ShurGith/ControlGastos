@@ -8,7 +8,7 @@ import {
 import 'react-swipeable-list/dist/styles.css';
 
 
-import { Expense } from "../types";
+import { type Expense } from "../types";
 import { formatDate } from "../helpers"
 import AmountDisplay from "./AmountDisplay";
 import { useMemo } from "react";

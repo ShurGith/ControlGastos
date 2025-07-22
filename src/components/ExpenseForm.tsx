@@ -1,5 +1,5 @@
 import { categories } from "../data/categories";
-import { type DraftExpense, type Expense } from '../types/types';
+import type { DraftExpense, Value } from '../types';
 import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
@@ -79,7 +79,7 @@ export default function ExpenseForm() {
       dispatch({ type: 'ADD_EXPENSE', payload: { expense } })
 
     setExpense({
-      amount: '',
+      amount: 0,
       expenseName: '',
       category: '',
       date: new Date()

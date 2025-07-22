@@ -3,6 +3,7 @@ export type Expense = {
   amount: number
   category: string
   date: Value
+  expenseName: string
 };
 
 export type DraftExpense = Omit<Expense, 'id'>;

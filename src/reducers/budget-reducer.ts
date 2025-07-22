@@ -6,7 +6,8 @@ export type BudgetActions =
     { type: 'SHOW_MODAL'}|
     {type:'CLOSE_MODAL'}|
     {type:"DELETE_EXPENSE",payload:{expenseId:string}}|
-    {type:"ADD_EXPENSE",payload:{expense:DraftExpense }} 
+    {type:"ADD_EXPENSE",payload:{expense:DraftExpense }} |
+    {type:"REMOVE_EXPENSE", payload:{id: Expense['id'] }};
 
 
 export type BudgetState = {
@@ -57,6 +58,15 @@ export const budgetReducer = (
             modal:false
         };
     }
+
+
+    if(action.type === "REMOVE_EXPENSE"){
+        return{
+            ...state,
+            expenses: state.expenses.filter(expense=>expense.id !==action.payload.id)
+        };
+    }
+
 
     return state;
 }

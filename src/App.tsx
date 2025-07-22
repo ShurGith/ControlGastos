@@ -16,7 +16,7 @@ const isValidBuget= useMemo(() => state.budget > 0, [state]);
         Planificador de Gastos
         </h1>
       </header>
-      <div className="max-w-3xl mx-auto shadow-lg rounded-lg mt-10 p-10">
+      <div className="max-w-3xl mx-auto shadow-lg rounded-lg mt-10 p-10 bg-white">
         {isValidBuget ? (<BudgetTracker />) : (<BudgetFrom />) }
       </div>
      {isValidBuget && (

@@ -11,7 +11,7 @@ function ExpenseList() {
             {isEmpty ? <p className="text-gray-500 text-2xl font-bold">No hay gastos</p>
                 : (
                     <>
-                        <h2 className="text-center text-xl font-bold">Lista de Gastos</h2>
+                        <h2 className="mb-4 text-gray-600 text-2xl font-bold">Lista de Gastos</h2>
 
                         {state.expenses.map((expense) => (
                             <ExpenseDetail key={expense.id} expense={expense}/>

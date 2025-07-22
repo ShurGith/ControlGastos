@@ -1,13 +1,15 @@
 import { categories } from "../data/categories";
 import { type DraftExpense, type Expense } from '../types/types';
-import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
 import ErrorMessage from "./ErrorMessage";
 import { useBudget } from "../hooks/useBudget";
+import { Icon } from "@iconify/react";
 
 export default function ExpenseForm() {
+
   const [expense, setExpense] = useState<DraftExpense>({
     amount: 0,
     expenseName: '',
@@ -16,12 +18,23 @@ export default function ExpenseForm() {
   })
 
   const [error, setError] = useState('')
-  const { dispatch, state} = useBudget();
+  const [previousAmout, setPreviousAamount] = useState(0);
+  const { dispatch, state, totalExpenses, remainingBalance } = useBudget();
+
+  const validateAmount = (valor: number) => {
+      if (valor - previousAmout > remainingBalance) {
+      setError(`La cantidad supera el presupuesto`);
+      return;
+    }else{
+        setError('');
+    }
+  }
 
   useEffect(() => {
-    if(state.editingId){
+    if (state.editingId) {
       const editingExpense = state.expenses.filter(currentExpense => currentExpense.id === state.editingId)[0];
       setExpense(editingExpense);
+      setPreviousAamount(editingExpense.amount);
     }
   }, [state.editingId])
 
@@ -34,10 +47,15 @@ export default function ExpenseForm() {
   const handleChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target; // destructuring
     const isAmountField = ['amount'].includes(name)
+
+    //Validar que la cantidad no sea mayor al presupuesto
+    validateAmount(+value);
+  
     setExpense({
       ...expense,
       [name]: isAmountField ? +value : value
     })
+
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,11 +65,20 @@ export default function ExpenseForm() {
       return;
     }
 
+
+    //Validar que la cantidad no sea mayor al presupuesto
+    validateAmount(expense.amount);
+ /*    if (expense.amount - previousAmout > remainingBalance) {
+      setError(`La cantidad supera el presupuesto`);
+      return;
+    } */
+
+
     //Añadir o actualizar un gasto
-    if(state.editingId)
-      dispatch({ type: 'UPDATE_EXPENSE', payload: { expense: {...expense, id: state.editingId} } })
-      else
-       dispatch({ type: 'ADD_EXPENSE', payload: { expense } })
+    if (state.editingId)
+      dispatch({ type: 'UPDATE_EXPENSE', payload: { expense: { ...expense, id: state.editingId } } })
+    else
+      dispatch({ type: 'ADD_EXPENSE', payload: { expense } })
 
     setExpense({
       amount: '',
@@ -62,10 +89,14 @@ export default function ExpenseForm() {
     setError('');
   }
 
+  const Icono = state.editingId ? "flowbite:edit-outline" : "mingcute:file-new-fill";
+  const Fondo = state.editingId ? "bg-blue-500" : "bg-green-600";
+
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
-      <legend className="uppercase text-center text-2xl font-black border-b-4 border-blue-500 py-2">
-        Nuevo Gasto
+      <legend className={`${Fondo} uppercase text-center text-2xl font-black border-b-4 py-2 flex justify-center items-center gap-8 mb-8 text-white`}>
+        <Icon icon={Icono} width="48" height="48" style={{ color: '#fff' }} />
+        {state.editingId ? "Editar Gasto" : "Nuevo Gasto"}
       </legend>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <div className="flex flex-col gap-2">
@@ -120,9 +151,8 @@ export default function ExpenseForm() {
         </div>
       </div>
       <input type="submit"
-        value="Agregar Gasto"
-        className="bg-blue-600 hover:bg-blue-700 transition-colors cursor-pointer uppercase font-bold w-full p-2 text-white rounded-lg" />
-
+        value={state.editingId ? "Actualizar Gasto" : "Añadir Gasto"}
+        className={`${Fondo} cursor-pointer uppercase font-bold w-full p-2 text-white rounded-lg`} />
     </form>
   )
 }

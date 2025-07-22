@@ -1,7 +1,11 @@
 import AmountDisplay from "./AmountDisplay"
+import { useBudget } from "../hooks/useBudget"
+
 
 function BudgetTracker() {
-  return (
+    const {state,totalExpenses,remainingBalance} = useBudget()
+    
+    return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-white">
         <div className="flex justify-center">
             <img src="/grafico.jpg" alt="Grafico de gastos" />
@@ -12,15 +16,15 @@ function BudgetTracker() {
             </button>
             <AmountDisplay 
                 label="Presupuesto"
-                amount={300}           
+                amount={state.budget}           
              />
             <AmountDisplay 
                 label="Disponible"
-                amount={200}           
+                amount={remainingBalance}           
              />
             <AmountDisplay 
                 label="Gastado"
-                amount={100}           
+                amount={totalExpenses}           
              />
         </div>
 

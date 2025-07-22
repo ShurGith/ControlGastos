@@ -5,17 +5,16 @@ import { useBudget } from '../hooks/useBudget'
 import ExpenseForm from './ExpenseForm'
 
 export default function ExpenseModal() {
-  const { state, dispatch} = useBudget()
+  const { state, dispatch,remainingBalance} = useBudget()
 
   return (
     <>
       <div className="fixed right-5 bottom-5 flex items-center justify-center">
-        <button className='cursor-pointer'
-          type="button"
-          onClick={() => dispatch({type:'SHOW_MODAL'})}
+        { remainingBalance > 0 && <button className='cursor-pointer'
+          type="button" onClick={() => dispatch({type:'SHOW_MODAL'})}
         >
           <PlusCircleIcon className='w-16 h-16 text-blue-600 rounded-full' />
-        </button>
+        </button>}
       </div>
 
       <Transition appear show={state.modal} as={Fragment}>

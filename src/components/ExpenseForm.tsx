@@ -1,6 +1,6 @@
 import { categories } from "../data/categories";
 import { type DraftExpense, type Expense } from '../types/types';
-import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -19,7 +19,7 @@ export default function ExpenseForm() {
 
   const [error, setError] = useState('')
   const [previousAmout, setPreviousAamount] = useState(0);
-  const { dispatch, state, totalExpenses, remainingBalance } = useBudget();
+  const { dispatch, state, remainingBalance } = useBudget();
 
   const validateAmount = (valor: number) => {
       if (valor - previousAmout > remainingBalance) {
@@ -65,14 +65,12 @@ export default function ExpenseForm() {
       return;
     }
 
-
     //Validar que la cantidad no sea mayor al presupuesto
     validateAmount(expense.amount);
  /*    if (expense.amount - previousAmout > remainingBalance) {
       setError(`La cantidad supera el presupuesto`);
       return;
     } */
-
 
     //Añadir o actualizar un gasto
     if (state.editingId)

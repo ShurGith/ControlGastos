@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { DraftExpense, Expense } from "../types";
+import type { Category, DraftExpense, Expense } from "../types";
 
 export type BudgetActions =
   { type: 'ADD_BUDGET', payload: { budget: number } } |
@@ -9,7 +9,10 @@ export type BudgetActions =
   { type: "ADD_EXPENSE", payload: { expense: DraftExpense } } |
   { type: "REMOVE_EXPENSE", payload: { id: Expense['id'] } } |
   { type: "EDITING_ID", payload: { id: Expense['id'] } } |
-  { type: "UPDATE_EXPENSE", payload: { expense: Expense } };
+  { type: "UPDATE_EXPENSE", payload: { expense: Expense } } |
+  { type: "RESSET_APP" } |
+  { type: "FILTER_CATEGORY", payload: { id: Expense['id'] } } 
+
 
 
 export type BudgetState = {
@@ -17,16 +20,18 @@ export type BudgetState = {
   modal: boolean
   expenses: Expense[]
   editingId: Expense["id"]
+  currentCategory: Category['id']
 };
 
-const initialBudget = () : number => {
-    const localStorageBudget = localStorage.getItem('budget');
-    return localStorageBudget ? parseInt(localStorageBudget) : 0;
-} 
+
+const initialBudget = (): number => {
+  const localStorageBudget = localStorage.getItem('budget');
+  return localStorageBudget ? parseInt(localStorageBudget) : 0;
+}
 
 const localStorageExpenses = (): Expense[] => {
-    const localStorageExpenses = localStorage.getItem("expenses");
-    return localStorageExpenses ? JSON.parse(localStorageExpenses) : [];
+  const localStorageExpenses = localStorage.getItem("expenses");
+  return localStorageExpenses ? JSON.parse(localStorageExpenses) : [];
 }
 
 export const initialState: BudgetState = {
@@ -34,6 +39,7 @@ export const initialState: BudgetState = {
   modal: false,
   expenses: localStorageExpenses(),
   editingId: '',
+  currentCategory: ''
 };
 
 const createExpense = (draftExpense: DraftExpense): Expense => ({
@@ -45,6 +51,15 @@ export const budgetReducer = (
   state: BudgetState,
   action: BudgetActions
 ) => {
+
+  if (action.type === "RESSET_APP") {
+    return {
+      ...state,
+      budget: 0,
+      expenses: [],
+    }
+  }
+
   if (action.type === "ADD_BUDGET") {
     return {
       ...state,
@@ -95,6 +110,13 @@ export const budgetReducer = (
       expenses: state.expenses.map(expense => expense.id === action.payload.expense.id ? action.payload.expense : expense),
       editingId: '',
       modal: false,
+    }
+  }
+
+  if(action.type === "FILTER_CATEGORY"){
+    return{
+      ...state,
+      currentCategory: action.payload.id
     }
   }
 

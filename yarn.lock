@@ -1823,6 +1823,11 @@ react-calendar@^5.0.0:
     get-user-locale "^2.2.1"
     warning "^4.0.0"
 
+react-circular-progressbar@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-circular-progressbar/-/react-circular-progressbar-2.2.0.tgz#282b7351dab2fd19c6d2c7f3cc698ed546c71c86"
+  integrity sha512-cgyqEHOzB0nWMZjKfWN3MfSa1LV3OatcDjPz68lchXQUEiBD5O1WsAtoVK4/DSL0B4USR//cTdok4zCBkq8X5g==
+
 react-date-picker@^11.0.0:
   version "11.0.0"
   resolved "https://registry.npmjs.org/react-date-picker/-/react-date-picker-11.0.0.tgz"

@@ -23,7 +23,7 @@ export default function ExpenseDetail({ expense }: ExpenseDetailProps) {
 
   const editActions = () => (
     <LeadingActions>
-      <SwipeAction onClick={() => console.info('EDIT ACTIONS')}>
+      <SwipeAction onClick={() => dispatch({type: 'EDITING_ID', payload: {id: expense.id}})}>
         Actualizar
       </SwipeAction>
     </LeadingActions>
@@ -59,9 +59,9 @@ export default function ExpenseDetail({ expense }: ExpenseDetailProps) {
             <img src={`/icono_${categoryInfo.icon}.svg`} alt={`Icono de ${categoryInfo.name}`} width="64px" />
           </div>
           <div className="flex-1 space-y-2">
-            <p className="text-sm font-bold uppercase text-slate-500">{categoryInfo.name}</p>
-            <h3>{expense.expenseName}</h3>
-            <p>{formatDate(expense.date!.toString())}</p>
+            <p className="text-sm font-bold uppercase text-slate-500 select-none ">{categoryInfo.name}</p>
+            <h3 className='select-none '>{expense.expenseName}</h3>
+            <p className='select-none '>{formatDate(expense.date!.toString())}</p>
           </div>
           <AmountDisplay amount={expense.amount} />
 

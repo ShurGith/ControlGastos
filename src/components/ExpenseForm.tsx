@@ -1,6 +1,6 @@
 import { categories } from "../data/categories";
 import { type DraftExpense, type Expense } from '../types/types';
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react';
 import DatePicker from 'react-date-picker';
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
@@ -16,7 +16,14 @@ export default function ExpenseForm() {
   })
 
   const [error, setError] = useState('')
-  const { dispatch } = useBudget();
+  const { dispatch, state} = useBudget();
+
+  useEffect(() => {
+    if(state.editingId){
+      const editingExpense = state.expenses.filter(currentExpense => currentExpense.id === state.editingId)[0];
+      setExpense(editingExpense);
+    }
+  }, [state.editingId])
 
   const handleChangeDate = (value: Value) => {
     setExpense({
@@ -34,14 +41,18 @@ export default function ExpenseForm() {
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    //Validar que todos los campos esten llenos
     if (Object.values(expense).some(value => !value)) {
       setError('Todos los campos son obligatorios')
       return;
     }
-    dispatch({
-      type: 'ADD_EXPENSE',
-      payload: { expense }
-    })
+
+    //Añadir o actualizar un gasto
+    if(state.editingId)
+      dispatch({ type: 'UPDATE_EXPENSE', payload: { expense: {...expense, id: state.editingId} } })
+      else
+       dispatch({ type: 'ADD_EXPENSE', payload: { expense } })
+
     setExpense({
       amount: '',
       expenseName: '',
@@ -49,9 +60,7 @@ export default function ExpenseForm() {
       date: new Date()
     })
     setError('');
-
   }
-
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>
